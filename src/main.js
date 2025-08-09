@@ -4,8 +4,16 @@ const ipApi = "https://ipapi.co/json/";
 const wttrApi = "https://wttr.in/";
 
 async function getLocationByIP() {
-	const res = await fetch(ipApi);
-	return res.json();
+	try {
+		const res = await fetch(ipApi);
+		if (!res.ok) {
+			throw new Error(`IP API request failed: ${res.status}`);
+		}
+		return await res.json();
+	} catch (error) {
+		console.error("Failed to fetch location by IP:", error);
+		return {};
+	}
 }
 
 function cacheLocation(loc) {
